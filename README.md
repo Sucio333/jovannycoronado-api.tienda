@@ -49,8 +49,8 @@ Todos incluyen `created_at` y `updated_at`, que se llenan automáticamente y son
 ### 1. Clonar el repositorio y entrar a la carpeta
 
 ```bash
-git clone https://github.com/Sucio333/Back-end-Django
-cd Back-end-Django
+git clone https://github.com/Sucio333/jovannycoronado-api.tienda
+cd jovannycoronado-api.tienda
 ```
 
 ### 2. Crear y activar el entorno virtual

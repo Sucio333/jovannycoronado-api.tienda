@@ -4,7 +4,7 @@ API REST para una tienda online, construida con **Django** y **Django REST Frame
 
 ## Tecnologías
 
-- Python 3
+- Python 3.12 o superior
 - Django 6.1
 - Django REST Framework 3.18
 - MariaDB / MySQL (conector PyMySQL)
@@ -14,10 +14,13 @@ API REST para una tienda online, construida con **Django** y **Django REST Frame
 ## Estructura del proyecto
 
 ```
-API_BACKEND/
+jovannycoronado-api.tienda/
 ├── manage.py
 ├── requirements.txt
-├── .env                  # variables de entorno (no se sube a Git)
+├── .env.example          # plantilla de variables de entorno
+├── .env                  # tus variables reales (no se sube a Git)
+├── .gitignore
+├── README.md
 ├── scripts/
 │   └── mariadb.sql       # script de la base de datos
 ├── tienda_online/        # configuración del proyecto
@@ -28,7 +31,11 @@ API_BACKEND/
     ├── serializers.py
     ├── views.py
     ├── urls.py
-    ├── templates/tienda/index.html
+    ├── admin.py
+    ├── migrations/
+    ├── templates/
+    │   ├── 404.html
+    │   └── tienda/index.html
     └── static/tienda/css/style.css
 ```
 

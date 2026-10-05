@@ -208,7 +208,8 @@ Respuesta `201 Created`:
 - El precio de un producto debe ser mayor que 0.
 - La cantidad de un detalle de pedido debe ser al menos 1.
 - `precio_unitario` no se envía: se copia desde el precio actual del producto al crear el detalle.
-- Las categorías, clientes y productos con pedidos asociados no se pueden eliminar (`on_delete=PROTECT`).
+- No se puede eliminar una categoría con productos, un cliente con pedidos ni un producto usado en un detalle de pedido (`on_delete=PROTECT`).
+- Al eliminar un pedido se eliminan también sus detalles (`on_delete=CASCADE`).
 
 ## Autor
 

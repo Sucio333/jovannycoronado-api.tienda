@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jovanny Coronado Tienda</title>
+  <link rel="stylesheet" href="{% static 'tienda/css/style.css' %}">
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="/" class="logo">Jovanny Coronado<span>Mi tienda</span></a>
+    <nav>
+      <a href="#inicio">Inicio</a>
+      <a href="#beneficios">Beneficios</a>
+      <a href="#productos">Productos</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <section id="inicio" class="hero">
+    <div class="hero-content">
+      <h1>Todo lo que buscas, en un solo lugar</h1>
+      <p>Productos seleccionados, precios justos y despacho a todo Chile.</p>
+      <a href="#productos" class="btn">Ver productos</a>
+    </div>
+  </section>
+
+  <section id="beneficios" class="container">
+    <div class="beneficios">
+      <div class="beneficio"><span>🚚</span><h3>Envío a todo Chile</h3><p>Despachamos a tu puerta.</p></div>
+      <div class="beneficio"><span>🔒</span><h3>Compra segura</h3><p>Tus datos siempre protegidos.</p></div>
+      <div class="beneficio"><span>↩️</span><h3>Cambios fáciles</h3><p>Hasta 10 días para cambios.</p></div>
+    </div>
+  </section>
+
+  <section id="productos" class="container">
+    <h2>Nuestros productos</h2>
+
+    <div class="toolbar">
+      <input type="search" id="buscador" placeholder="Buscar producto...">
+      <div id="lista-categorias" class="chips"></div>
+    </div>
+
+    <div id="lista-productos" class="grid"></div>
+  </section>
+
+  <footer id="contacto">
+    <div class="footer-inner">
+      <div>
+        <strong>MiTienda</strong>
+        <p>Temuco, Chile</p>
+      </div>
+      <div>
+        <p>contacto@mitienda.cl</p>
+        <p>+56 9 1234 5678</p>
+      </div>
+    </div>
+    <p class="copy">© 2026 MiTienda. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    let productos = [];
+    let categoriaActiva = "todas";
+
+    const fmt = n => "$" + Number(n).toLocaleString("es-CL");
+
+    async function getAll(url) {
+      let items = [];
+      while (url) {
+        const res = await fetch(url);
+        const data = await res.json();
+        if (Array.isArray(data)) return data;
+        items = items.concat(data.results);
+        url = data.next;
+      }
+      return items;
+    }
+
+    function pintarProductos() {
+      const texto = document.getElementById("buscador").value.toLowerCase();
+      const filtrados = productos.filter(p =>
+        p.activo &&
+        (categoriaActiva === "todas" || p.categoria_nombre === categoriaActiva) &&
+        p.nombre.toLowerCase().includes(texto)
+      );
+
+      document.getElementById("lista-productos").innerHTML = filtrados.length
+        ? filtrados.map(p => `
+            <article class="card">
+              <div class="card-img">🛍️</div>
+              <span class="tag">${p.categoria_nombre}</span>
+              <h3>${p.nombre}</h3>
+              <p>${p.descripcion || "Sin descripción."}</p>
+              <div class="card-foot">
+                <strong>${fmt(p.precio)}</strong>
+                <small class="${p.stock > 0 ? "ok" : "sin"}">
+                  ${p.stock > 0 ? "Stock: " + p.stock : "Agotado"}
+                </small>
+              </div>
+            </article>`).join("")
+        : "<p class='vacio'>No se encontraron productos.</p>";
+    }
+
+    function pintarCategorias(categorias) {
+      const cont = document.getElementById("lista-categorias");
+      const nombres = ["todas", ...categorias.map(c => c.nombre)];
+      cont.innerHTML = nombres.map(n =>
+        `<button class="chip ${n === categoriaActiva ? "activo" : ""}" data-cat="${n}">
+          ${n === "todas" ? "Todas" : n}
+        </button>`).join("");
+
+      cont.querySelectorAll(".chip").forEach(btn =>
+        btn.addEventListener("click", () => {
+          categoriaActiva = btn.dataset.cat;
+          pintarCategorias(categorias);
+          pintarProductos();
+        }));
+    }
+
+    async function iniciar() {
+      const [cats, prods] = await Promise.all([
+        getAll("/api/categorias/"),
+        getAll("/api/productos/")
+      ]);
+      productos = prods;
+      pintarCategorias(cats);
+      pintarProductos();
+    }
+
+    document.getElementById("buscador").addEventListener("input", pintarProductos);
+    iniciar();
+  </script>
+</body>
+</html>

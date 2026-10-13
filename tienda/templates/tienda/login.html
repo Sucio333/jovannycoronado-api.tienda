@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Iniciar sesión | Tienda Online</title>
+  <style>
+    body { background:#111; color:#eee; font-family:"Segoe UI",Arial,sans-serif;
+           display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; }
+    form { background:#1c1c1c; padding:32px; border-radius:8px; width:320px; }
+    h1 { margin-top:0; font-size:1.4rem; }
+    p { margin:12px 0; }
+    input { width:100%; padding:8px; box-sizing:border-box; }
+    button { background:#c0392b; color:#fff; border:0; padding:10px 20px; border-radius:6px; cursor:pointer; }
+    .errorlist { color:#e74c3c; list-style:none; padding:0; }
+    a { color:#aaa; }
+  </style>
+</head>
+<body>
+  <form method="post">
+    {% csrf_token %}
+    <h1>Iniciar sesión</h1>
+    {{ form.as_p }}
+    <input type="hidden" name="next" value="{{ next }}">
+    <button type="submit">Entrar</button>
+    <p><a href="{% url 'home' %}">Volver al inicio</a></p>
+  </form>
+</body>
+</html>

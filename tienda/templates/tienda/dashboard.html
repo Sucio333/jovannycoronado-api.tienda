@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel | Tienda Online</title>
+  <style>
+    body { background:#111; color:#eee; font-family:"Segoe UI",Arial,sans-serif; padding:32px; }
+    .tarjetas { display:flex; gap:16px; margin:24px 0; }
+    .tarjeta { background:#1c1c1c; padding:20px; border-radius:8px; min-width:140px; }
+    .tarjeta strong { font-size:2rem; display:block; }
+    button { background:#c0392b; color:#fff; border:0; padding:10px 20px; border-radius:6px; cursor:pointer; }
+    a { color:#aaa; }
+  </style>
+</head>
+<body>
+  <h1>Panel de la tienda</h1>
+  <p>Sesión iniciada como <strong>{{ user.username }}</strong>.</p>
+  <div class="tarjetas">
+    <div class="tarjeta"><strong>{{ total_productos }}</strong>Productos</div>
+    <div class="tarjeta"><strong>{{ total_clientes }}</strong>Clientes</div>
+    <div class="tarjeta"><strong>{{ total_pedidos }}</strong>Pedidos</div>
+  </div>
+  <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Cerrar sesión</button>
+  </form>
+  <p><a href="{% url 'home' %}">Ir al inicio</a></p>
+</body>
+</html>

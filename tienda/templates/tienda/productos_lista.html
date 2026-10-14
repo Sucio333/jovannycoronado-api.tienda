@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Productos</title>
+  <style>
+    body { background:#111; color:#fff; font-family:sans-serif; padding:48px; }
+    table { border-collapse:collapse; width:100%; max-width:800px; }
+    th, td { padding:10px; border-bottom:1px solid #333; text-align:left; }
+    a { color:#bbb; }
+  </style>
+</head>
+<body>
+  <h1>Productos</h1>
+  <p>Sesión iniciada como <strong>{{ user.username }}</strong>.</p>
+  <table>
+    <tr><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Stock</th></tr>
+    {% for p in productos %}
+    <tr>
+      <td>{{ p.nombre }}</td>
+      <td>{{ p.categoria }}</td>
+      <td>{{ p.precio }}</td>
+      <td>{{ p.stock }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">No hay productos.</td></tr>
+    {% endfor %}
+  </table>
+  <p><a href="{% url 'dashboard' %}">Volver al panel</a></p>
+</body>
+</html>

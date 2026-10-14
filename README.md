@@ -29,13 +29,18 @@ jovannycoronado-api.tienda/
 └── tienda/               # aplicación principal
     ├── models.py
     ├── serializers.py
-    ├── views.py
+    ├── views.py          # API REST (ViewSets)
+    ├── web_views.py      # vistas web protegidas (FBV y CBV)
     ├── urls.py
     ├── admin.py
     ├── migrations/
     ├── templates/
     │   ├── 404.html
-    │   └── tienda/index.html
+    │   └── tienda/
+    │       ├── index.html
+    │       ├── login.html
+    │       ├── dashboard.html
+    │       └── productos_lista.html
     └── static/tienda/css/style.css
 ```
 
@@ -131,11 +136,12 @@ Si creaste la base con `scripts/mariadb.sql`, `DB_PASSWORD` debe ser `CambiaEsta
 python manage.py migrate
 ```
 
-### 7. Crear un superusuario (opcional, para el panel de administración)
+### 7. Crear un superusuario 
 
 ```bash
 python manage.py createsuperuser
 ```
+Con este usuario se accede a `/login/`, `/dashboard/`, `/productos/` y `/admin/`.
 
 ### 8. Iniciar el servidor
 
@@ -145,11 +151,15 @@ python manage.py runserver
 
 ## Uso
 
-| Dirección | Qué es |
-|---|---|
-| `http://127.0.0.1:8000/` | Página de inicio de la tienda |
-| `http://127.0.0.1:8000/api/` | Raíz de la API (navegable) |
-| `http://127.0.0.1:8000/admin/` | Panel de administración |
+| Dirección | Qué es | Acceso |
+|---|---|---|
+| `/` | Página de inicio de la tienda | Pública |
+| `/login/` | Formulario de inicio de sesión | Pública |
+| `/logout/` | Cierra la sesión (solo POST) | Usuario autenticado |
+| `/dashboard/` | Panel con contadores (vista de función con `@login_required`) | Privada |
+| `/productos/` | Listado de productos (vista de clase con `LoginRequiredMixin`) | Privada |
+| `/api/` | Raíz de la API (navegable) | Pública |
+| `/admin/` | Panel de administración | Staff |
 
 ## Endpoints de la API
 
@@ -202,6 +212,26 @@ Respuesta `201 Created`:
 3. Clientes
 4. Pedidos (requieren un cliente existente)
 5. Detalles de pedido (requieren un pedido y un producto existentes)
+
+## Autenticación y control de acceso
+
+El proyecto usa el sistema de autenticación de Django (sesiones).
+
+- **Login:** `LoginView` con la plantilla `tienda/login.html`.
+- **Logout:** `LogoutView`. Django exige POST, por eso el botón "Cerrar sesión" es un formulario con `csrf_token`.
+- **Vista de función protegida:** `dashboard`, con el decorador `@login_required`.
+- **Vista de clase protegida:** `ProductoListaView`, con `LoginRequiredMixin`.
+- **Configuración** en `settings.py`:
+
+```python
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "dashboard"
+LOGOUT_REDIRECT_URL = "home"
+```
+
+Si un usuario sin sesión entra a una vista privada, Django lo redirige a `/login/?next=<ruta>` y, después de iniciar sesión, lo devuelve a la ruta que pedía.
+
+Para probar el acceso necesitas un usuario (ver el paso 7 de la instalación: `python manage.py createsuperuser`).
 
 ## Validaciones y reglas
 

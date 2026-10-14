@@ -11,5 +11,6 @@ urlpatterns = [
     path("login/", auth_views.LoginView.as_view(template_name="tienda/login.html"), name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("dashboard/", web_views.dashboard, name="dashboard"),
+    path("productos/", web_views.ProductoListaView.as_view(), name="productos"),
     path("", TemplateView.as_view(template_name="tienda/index.html"), name="home"),
 ]

@@ -1,0 +1,14 @@
+[
+{
+  "model": "tienda.detallepedido",
+  "pk": 1,
+  "fields": {
+    "pedido": 1,
+    "producto": 1,
+    "cantidad": 4,
+    "precio_unitario": "17000.00",
+    "created_at": "2026-10-05T17:15:32.883Z",
+    "updated_at": "2026-10-05T17:18:07.605Z"
+  }
+}
+]

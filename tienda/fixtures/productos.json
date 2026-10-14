@@ -1,0 +1,16 @@
+[
+{
+  "model": "tienda.producto",
+  "pk": 1,
+  "fields": {
+    "categoria": 1,
+    "nombre": "Polera Nirvana",
+    "descripcion": "Talla L, año 90, original",
+    "precio": "17000.00",
+    "stock": 5,
+    "activo": true,
+    "created_at": "2026-10-05T02:14:18.115Z",
+    "updated_at": "2026-10-05T02:33:49.715Z"
+  }
+}
+]

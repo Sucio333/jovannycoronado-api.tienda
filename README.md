@@ -103,6 +103,8 @@ GRANT ALL PRIVILEGES ON tienda_online_db.* TO 'tienda_user'@'127.0.0.1';
 FLUSH PRIVILEGES;
 ```
 
+También puedes ejecutar los scripts por separado, en este orden: `scripts/01_crear_base_datos.sql`, `scripts/02_crear_usuario.sql` y `scripts/03_asignar_permisos.sql`.
+
 ### 5. Crear el archivo `.env`
 
 En la raíz del proyecto (junto a `manage.py`), copia el archivo de ejemplo y rellena `SECRET_KEY` y `DB_PASSWORD`:
@@ -212,6 +214,20 @@ Respuesta `201 Created`:
 3. Clientes
 4. Pedidos (requieren un cliente existente)
 5. Detalles de pedido (requieren un pedido y un producto existentes)
+
+## Datos iniciales (fixtures)
+
+El proyecto incluye datos de ejemplo en `tienda/fixtures/`. Después de aplicar las migraciones, se cargan en este orden:
+
+```bash
+python manage.py loaddata categorias productos clientes pedidos detalles_pedido
+```
+
+En Windows, si aparece un error de codificación, activa UTF-8 antes de cargar:
+
+```powershell
+$env:PYTHONUTF8 = "1"
+```
 
 ## Autenticación y control de acceso
 
